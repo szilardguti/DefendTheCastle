@@ -24,7 +24,7 @@ Esc gomb – Átmenetileg szünetel a játék, itt van lehetőség kilépni vagy
 
 [Torony](https://assetstore.unity.com/packages/3d/props/exterior/tower-defence-cannon-74837)
 
-[Robbanás effektek](https://assetstore.unity.com/packages/vfx/particles/war-fx-5669](https://assetstore.unity.com/packages/vfx/particles/war-fx-5669)
+[Robbanás effektek](https://assetstore.unity.com/packages/vfx/particles/war-fx-5669)
 
 [Ég textúra](https://assetstore.unity.com/packages/2d/textures-materials/sky/fantasy-skybox-free-18353)
 
