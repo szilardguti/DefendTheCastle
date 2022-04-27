@@ -6,7 +6,7 @@ public class CannonBallExplosion : MonoBehaviour
 {
     private void OnCollisionEnter(Collision collision)
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 4f);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 2f);
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag("Enemy") && hitCollider is SphereCollider)

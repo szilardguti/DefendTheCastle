@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     private BoxCollider hitRange;
     private CapsuleCollider capsuleBody;
 
+    public GameObject turretPrefab;
+
     private void Start()
     {
         hitRange = GetComponent<BoxCollider>();
@@ -26,6 +28,14 @@ public class PlayerController : MonoBehaviour
 
         transform.Translate(0, 0, translation * Time.deltaTime * speed);
         transform.Rotate(0, rotation * Time.deltaTime * rotationSpeed, 0);
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            if (CheckIfCanPlaceTurret())
+            {
+                Instantiate(turretPrefab, transform.position, Quaternion.identity);
+            }
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -72,5 +82,21 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
 
         capsuleBody.enabled = true;
+    }
+
+    private bool CheckIfCanPlaceTurret()
+    {
+        bool result = true;
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 2f);
+
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("Obstacle") || hitCollider.CompareTag("Road"))
+            {
+                result = false;
+            }
+        }
+
+        return result;
     }
 }
