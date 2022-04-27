@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class TowerController : MonoBehaviour
 {
-    public Transform target;
+    [Tooltip("current target of this turret")]private Transform target;
+    private Transform origoTransform;
+    public bool hasTarget = false;
 
     private Vector3 previousTargetPos;
     private float targetVelocity;
@@ -12,18 +14,19 @@ public class TowerController : MonoBehaviour
     private float targetTimeToFuturePos;
 
     public GameObject cannonBallPrefab;
-
+    public float reloadSpeed = 2.5f;
 
     private void Start()
     {
-        previousTargetPos = target.position;   
+        origoTransform = GameObject.Find("/Enemies").transform;
+        target = origoTransform;
+        StartCoroutine(CheckIfCouldShoot());
     }
-
-
 
     // Update is called once per frame
     void Update()
     {
+
         //calculate position
         var direction = target.position - transform.position; 
         //set y axis so it won't rotate
@@ -39,12 +42,42 @@ public class TowerController : MonoBehaviour
 
         previousTargetPos = target.position;
 
+        if (!(target.gameObject.GetComponent<EnemyController>() is EnemyController))
+        {
+            return;
+        }
+        if (target.GetComponent<EnemyController>().isDead)
+        {
+            hasTarget = false;
+        }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+    private void OnTriggerStay(Collider other)
+    {
+        if (!(other.gameObject.GetComponent<EnemyController>() is EnemyController))
+        {
+            return;
+        }
+
+
+        if (!hasTarget && !other.GetComponent<EnemyController>().isDead)
+        {
+            hasTarget = true;
+            previousTargetPos = other.transform.position;
+            target = other.transform;
+        }
+    }
+
+    IEnumerator CheckIfCouldShoot()
+    {
+        if (hasTarget)
         {
             GameObject ballShot = Instantiate(cannonBallPrefab, transform.Find("rotater").Find("CannonBallSpawnPoint").position, transform.Find("rotater").rotation);
 
-            ballShot.GetComponent<Rigidbody>().AddForce( (target.position + (targetVelocityVec * 0.3f *targetTimeToFuturePos)) - transform.position, ForceMode.Impulse);
+            ballShot.GetComponent<Rigidbody>().AddForce((target.position + (targetVelocityVec * 0.3f * targetTimeToFuturePos)) - transform.position, ForceMode.Impulse);
+            yield return new WaitForSeconds(reloadSpeed);
         }
+        yield return new WaitForEndOfFrame();
+        StartCoroutine(CheckIfCouldShoot());
     }
 }
