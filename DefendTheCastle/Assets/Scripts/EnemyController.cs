@@ -10,16 +10,17 @@ public class EnemyController : MonoBehaviour
     public float healthPoint = 100f;
     public float damage = 20;
 
-    public Vector3 goalPosition;
-
     public Slider hpSlider;
     public Transform canvasTransform;
 
+    public PathSystem pathSystem;
+    private int pathDone = 0;
+    private Transform goalPosition;
 
     private void Start()
     {
-        goalPosition = new Vector3(-1f, 0.25f, -15f);
-        
+        goalPosition = pathSystem.wayPoints[0];
+
         hpSlider.maxValue = healthPoint;
         hpSlider.value = healthPoint;
     }
@@ -27,8 +28,17 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, goalPosition, speed * Time.deltaTime);
-        transform.LookAt(goalPosition);   
+        if (pathDone < pathSystem.pathCount)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, goalPosition.position, speed * Time.deltaTime);
+            transform.LookAt(goalPosition);
+
+            if (Vector3.Distance(transform.position, goalPosition.position) < 0.25)
+            {
+                pathDone++;
+                goalPosition = pathSystem.wayPoints[pathDone];
+            }
+        }
     }
 
     private void LateUpdate()
@@ -39,6 +49,9 @@ public class EnemyController : MonoBehaviour
 
     public void enemyHit(float damageDealt)
     {
+        if (isDead)
+            return;
+
         healthPoint -= damageDealt;
 
         if (healthPoint < 0)
