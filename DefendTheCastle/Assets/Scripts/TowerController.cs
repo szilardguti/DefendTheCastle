@@ -28,6 +28,17 @@ public class TowerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameController.isGamePaused)
+        {
+            return;
+        }
+
+        if (GameController.isGameLost || GameController.isGameWon)
+        {
+            StopAllCoroutines();
+            return;
+        }
+
         if (!(target.gameObject.GetComponent<EnemyController>() is EnemyController))
         {
             return;

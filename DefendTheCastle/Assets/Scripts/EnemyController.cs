@@ -46,6 +46,11 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(GameController.isGameLost || GameController.isGameWon || GameController.isGamePaused)
+        {
+            return;
+        }
+
         if (pathDone < pathSystem.pathCount)
         {
             transform.position = Vector3.MoveTowards(transform.position, goalPosition.position, speed * Time.deltaTime);
@@ -54,6 +59,12 @@ public class EnemyController : MonoBehaviour
             if (Vector3.Distance(transform.position, goalPosition.position) < 0.25)
             {
                 pathDone++;
+
+                if(pathDone == pathSystem.pathCount)
+                {
+                    return;
+                }
+
                 goalPosition = pathSystem.wayPoints[pathDone];
             }
         }

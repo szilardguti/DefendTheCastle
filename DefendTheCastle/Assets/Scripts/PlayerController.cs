@@ -10,7 +10,8 @@ public class PlayerController : MonoBehaviour
     public float rotationSpeed = 10f;
     public float attackSpeed = 1.5f;
     public float damage = 15f;
-    public float healthPoints = 200f;
+    public float maxHealthPoints = 250f;
+    public float actualHealthPoints;
     private bool isPlayerDizzy = false;
 
     private BoxCollider hitRange;
@@ -29,10 +30,16 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         hitRange = GetComponent<BoxCollider>();
         capsuleBody = GetComponent<CapsuleCollider>();
+        actualHealthPoints = maxHealthPoints;
     }
 
     void Update()
     {
+        if (GameController.isGameLost || GameController.isGameWon || GameController.isGamePaused)
+        {
+            return;
+        }
+
         float translation = Input.GetAxis("Vertical") * speed;
         float rotation = Input.GetAxis("Horizontal") * rotationSpeed;
 
@@ -85,14 +92,16 @@ public class PlayerController : MonoBehaviour
     private void DamagePlayer(EnemyController enemy)
     {
         enemy.animator.SetTrigger("enemyAttack");
-        healthPoints -= enemy.damage;
+        actualHealthPoints -= enemy.damage;
 
-        if(healthPoints < 0)
+        if(actualHealthPoints < 0)
         {
             GameController.isGameLost = true;
             gameController.GameOver();
             animator.SetTrigger("playerDie");
         }
+
+        gameController.UpdateHP();
     }
 
     IEnumerator PlayerAttackOnCooldown()

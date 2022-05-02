@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
     public static int levelCount = 1;
     public static bool isGameWon = false;
     public static bool isGameLost = false;
+    public static bool isGamePaused = false;
 
     public int goldAmount = 0;
     public int towerCost = 250;
@@ -19,33 +20,71 @@ public class GameController : MonoBehaviour
     [Header("UI components")]
     public TextMeshProUGUI goldText;
     public TextMeshProUGUI levelText;
+    public GameObject menuBackground;
+    public TextMeshProUGUI menuText;
+
+    [Header("Player Components for HP")]
+    public Slider playerHPSlider;
+    public TextMeshProUGUI playerHPText;
+    private PlayerController player;
+
 
     private void Start()
     {
-        UpadteGoldText();
-        UpadteLevelText();
+        player = FindObjectOfType<PlayerController>();
+        playerHPSlider.maxValue = player.maxHealthPoints;
+        UpdateHP();
+
+        menuBackground.SetActive(false);
+        UpdateGoldText();
+        UpdateLevelText();
+
+
         SpawnWave();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            isGamePaused = !isGamePaused;
+
+            if (isGamePaused)
+            {
+                PauseGame();
+            }
+            else
+            {
+                ResumeGame();
+            }
+        }
     }
 
     public void AddGold(int gold)
     {
         goldAmount += gold;
-        UpadteGoldText();
+        UpdateGoldText();
     }
 
     public void RemoveGold()
     {
         goldAmount -= towerCost;
-        UpadteGoldText();
+        UpdateGoldText();
     }
 
-    private void UpadteGoldText()
+    private void UpdateGoldText()
     {
         goldText.SetText("Gold: {}", goldAmount);
     }
-    private void UpadteLevelText()
+    private void UpdateLevelText()
     {
         levelText.SetText("Level: {}", levelCount);
+    }
+
+    public void UpdateHP()
+    {
+        playerHPSlider.value = player.actualHealthPoints;
+        playerHPText.SetText("{0}/{1}", player.actualHealthPoints, player.maxHealthPoints);
     }
 
     public void SpawnWave()
@@ -80,7 +119,7 @@ public class GameController : MonoBehaviour
             if (!isGameWon)
             {
                 SpawnWave();
-                UpadteLevelText();
+                UpdateLevelText();
                 enemySpawnSystem.isWaveOver = false;
             }
 
@@ -95,5 +134,29 @@ public class GameController : MonoBehaviour
     public void GameOver()
     {
         StopAllCoroutines();
+        enemySpawnSystem.StopSpawning();
+        menuBackground.SetActive(true);
+
+        if (isGameWon)
+        {
+            menuText.SetText("game won!");
+        }
+        else
+        {
+            menuText.SetText("game lost!");
+        }
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0;
+        menuBackground.SetActive(true);
+        menuText.SetText("game paused");
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;
+        menuBackground.SetActive(false);
     }
 }

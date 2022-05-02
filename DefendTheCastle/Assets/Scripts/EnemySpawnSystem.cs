@@ -24,6 +24,11 @@ public class EnemySpawnSystem : MonoBehaviour
         enemyParent = GameObject.Find("Enemies");
     }
 
+    public void StopSpawning()
+    {
+        StopAllCoroutines();
+    }
+
     public void SpawnEnemyWave()
     {
         enemyAmountForWave = 10 * GameController.levelCount;
@@ -58,7 +63,7 @@ public class EnemySpawnSystem : MonoBehaviour
         {
             foreach (Transform enemy in enemyParent.transform)
             {
-                if (enemy.GetComponent<EnemyController>().isDead)
+                if (enemy.GetComponent<EnemyController>().isDead && enemy.gameObject.activeSelf)
                 {
                     killedEnemy++;
                 }
