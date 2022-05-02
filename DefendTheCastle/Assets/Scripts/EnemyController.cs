@@ -5,24 +5,38 @@ using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
+    [Header("Enemy Stats")]
     public float speed = 1.5f;
     public bool isDead = false;
-    public float healthPoint = 100f;
+    public float baseHealthPoint = 100f;
+    public float actualHealthPoint;
     public float damage = 20;
+    public int goldWorth;
 
+    [Header("HP UI")]
     public Slider hpSlider;
     public Transform canvasTransform;
 
-    public PathSystem pathSystem;
+    [Header("Path Components")]
+    private PathSystem pathSystem;
     private int pathDone = 0;
     private Transform goalPosition;
 
+    //
+    private GameController gameController;
+
     private void Start()
     {
+        pathSystem = FindObjectOfType<PathSystem>();
+        gameController = FindObjectOfType<GameController>();
+
+
         goalPosition = pathSystem.wayPoints[0];
 
-        hpSlider.maxValue = healthPoint;
-        hpSlider.value = healthPoint;
+        actualHealthPoint = Random.Range(baseHealthPoint, baseHealthPoint * GameController.levelCount);
+
+        hpSlider.maxValue = actualHealthPoint;
+        hpSlider.value = actualHealthPoint;
     }
 
     // Update is called once per frame
@@ -52,15 +66,17 @@ public class EnemyController : MonoBehaviour
         if (isDead)
             return;
 
-        healthPoint -= damageDealt;
+        actualHealthPoint -= damageDealt;
 
-        if (healthPoint < 0)
+        if (actualHealthPoint < 0)
         {
-            healthPoint = 0;
+            actualHealthPoint = 0;
             isDead = true;
             speed = 0;
+
+            gameController.AddGold(goldWorth);
         }
 
-        hpSlider.value = healthPoint;
+        hpSlider.value = actualHealthPoint;
     }
 }

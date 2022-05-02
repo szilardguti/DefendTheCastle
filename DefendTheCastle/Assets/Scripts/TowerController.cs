@@ -6,13 +6,15 @@ public class TowerController : MonoBehaviour
 {
     [Tooltip("current target of this turret")]private Transform target;
     private Transform origoTransform;
-    public bool hasTarget = false;
+    private bool hasTarget = false;
+
 
     private Vector3 previousTargetPos;
     private float targetVelocity;
     private Vector3 targetVelocityVec;
     private float targetTimeToFuturePos;
 
+    [Header("Cannonball")]
     public GameObject cannonBallPrefab;
     public float reloadSpeed = 2.5f;
 

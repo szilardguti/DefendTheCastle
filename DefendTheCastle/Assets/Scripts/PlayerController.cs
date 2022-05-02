@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public float attackSpeed = 1.5f;
     public float damage = 15f;
     public float healthPoints = 100f;
+    private bool isPlayerDizzy = false;
 
     private BoxCollider hitRange;
     private CapsuleCollider capsuleBody;
@@ -57,7 +58,10 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Enemy hit player");
-            StartCoroutine(PlayerDizzy());
+            if (!isPlayerDizzy)
+            {
+                StartCoroutine(PlayerDizzy());
+            }
         }
     }
 
@@ -71,6 +75,8 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator PlayerDizzy()
     {
+        isPlayerDizzy = true;
+
         float tempSpeed = speed;
         speed = 0;
         capsuleBody.enabled = false;
@@ -82,6 +88,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
 
         capsuleBody.enabled = true;
+        isPlayerDizzy = false;
     }
 
     private bool CheckIfCanPlaceTurret()
