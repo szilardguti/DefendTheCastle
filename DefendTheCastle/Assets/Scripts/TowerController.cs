@@ -28,6 +28,14 @@ public class TowerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!(target.gameObject.GetComponent<EnemyController>() is EnemyController))
+        {
+            return;
+        }
+        if (target.GetComponent<EnemyController>().isDead)
+        {
+            hasTarget = false;
+        }
 
         //calculate position
         var direction = target.position - transform.position; 
@@ -43,15 +51,6 @@ public class TowerController : MonoBehaviour
         targetTimeToFuturePos = Vector3.Distance(target.position, transform.position) / targetVelocity;
 
         previousTargetPos = target.position;
-
-        if (!(target.gameObject.GetComponent<EnemyController>() is EnemyController))
-        {
-            return;
-        }
-        if (target.GetComponent<EnemyController>().isDead)
-        {
-            hasTarget = false;
-        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -72,11 +71,13 @@ public class TowerController : MonoBehaviour
 
     IEnumerator CheckIfCouldShoot()
     {
-        if (hasTarget)
+        Vector3 forceVec = (target.position + (targetVelocityVec * 0.3f * targetTimeToFuturePos)) - transform.position;
+
+        if (hasTarget && !float.IsNaN(forceVec.x) && !float.IsNaN(forceVec.z) && !float.IsNaN(forceVec.y))
         {
             GameObject ballShot = Instantiate(cannonBallPrefab, transform.Find("rotater").Find("CannonBallSpawnPoint").position, transform.Find("rotater").rotation);
+            ballShot.GetComponent<Rigidbody>().AddForce(forceVec, ForceMode.Impulse);
 
-            ballShot.GetComponent<Rigidbody>().AddForce((target.position + (targetVelocityVec * 0.3f * targetTimeToFuturePos)) - transform.position, ForceMode.Impulse);
             yield return new WaitForSeconds(reloadSpeed);
         }
         yield return new WaitForEndOfFrame();

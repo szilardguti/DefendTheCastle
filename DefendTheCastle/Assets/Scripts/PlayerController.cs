@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Player Stats")]
     public float speed = 2f;
     public float rotationSpeed = 10f;
     public float attackSpeed = 1.5f;
@@ -14,7 +15,11 @@ public class PlayerController : MonoBehaviour
     private BoxCollider hitRange;
     private CapsuleCollider capsuleBody;
 
+    [Header("Turret Prefab - TODO clean this out of here")]
     public GameObject turretPrefab;
+
+    [Header("GameController")]
+    public GameController gameController;
 
     private void Start()
     {
@@ -35,6 +40,7 @@ public class PlayerController : MonoBehaviour
             if (CheckIfCanPlaceTurret())
             {
                 Instantiate(turretPrefab, transform.position, Quaternion.identity);
+                gameController.RemoveGold();
             }
         }
     }
@@ -93,6 +99,12 @@ public class PlayerController : MonoBehaviour
 
     private bool CheckIfCanPlaceTurret()
     {
+        if(gameController.towerCost > gameController.goldAmount)
+        {
+            Debug.Log("Not enough gold for a turret!");
+            return false;
+        }
+
         bool result = true;
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 2f);
 

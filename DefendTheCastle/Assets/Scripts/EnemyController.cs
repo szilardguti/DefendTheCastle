@@ -34,6 +34,7 @@ public class EnemyController : MonoBehaviour
         goalPosition = pathSystem.wayPoints[0];
 
         actualHealthPoint = Random.Range(baseHealthPoint, baseHealthPoint * GameController.levelCount);
+        damage = damage + 10 * GameController.levelCount;
 
         hpSlider.maxValue = actualHealthPoint;
         hpSlider.value = actualHealthPoint;
@@ -74,7 +75,10 @@ public class EnemyController : MonoBehaviour
             isDead = true;
             speed = 0;
 
-            gameController.AddGold(goldWorth);
+            gameController.AddGold(Random.Range(Mathf.FloorToInt(goldWorth * 0.9f), Mathf.FloorToInt(goldWorth * 1.1f)));
+
+            this.GetComponent<CapsuleCollider>().enabled = false;
+            this.GetComponent<SphereCollider>().enabled = false;
         }
 
         hpSlider.value = actualHealthPoint;
