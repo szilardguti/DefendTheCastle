@@ -125,3 +125,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28c9a69146bfea543bca25a34ef1c541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosionPrefab: {fileID: 286746242058537260, guid: 4191a6eb296e35b4cb0e8c9b932d1f26, type: 3}
+  cannonFireExplosion: {fileID: 3468171736606539146, guid: 80816d0f50222b148a894004ca6a1747, type: 3}

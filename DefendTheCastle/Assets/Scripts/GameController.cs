@@ -7,6 +7,8 @@ using TMPro;
 public class GameController : MonoBehaviour
 {
     public static int levelCount = 1;
+    public static bool isGameWon = false;
+    public static bool isGameLost = false;
 
     public int goldAmount = 0;
     public int towerCost = 250;
@@ -16,10 +18,12 @@ public class GameController : MonoBehaviour
 
     [Header("UI components")]
     public TextMeshProUGUI goldText;
+    public TextMeshProUGUI levelText;
 
     private void Start()
     {
         UpadteGoldText();
+        UpadteLevelText();
         SpawnWave();
     }
 
@@ -39,6 +43,10 @@ public class GameController : MonoBehaviour
     {
         goldText.SetText("Gold: {}", goldAmount);
     }
+    private void UpadteLevelText()
+    {
+        levelText.SetText("Level: {}", levelCount);
+    }
 
     public void SpawnWave()
     {
@@ -57,19 +65,35 @@ public class GameController : MonoBehaviour
             Debug.Log("Wave " + levelCount + "is finished");
 
             levelCount++;
+
+            if(levelCount > enemySpawnSystem.maxLevel)
+            {
+                isGameWon = true;
+                GameOver();
+            }
             
             foreach(Transform enemy in GameObject.Find("Enemies").transform)
             {
                 enemy.gameObject.SetActive(false);
             }
 
-            SpawnWave();
-            enemySpawnSystem.isWaveOver = false;
+            if (!isGameWon)
+            {
+                SpawnWave();
+                UpadteLevelText();
+                enemySpawnSystem.isWaveOver = false;
+            }
+
             yield return new WaitForSeconds(10f);
         }
         else
         {
             StartCoroutine(CheckIfWaveIsFinished());
         }
+    }
+
+    public void GameOver()
+    {
+        StopAllCoroutines();
     }
 }

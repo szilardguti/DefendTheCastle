@@ -22,11 +22,13 @@ public class EnemyController : MonoBehaviour
     private int pathDone = 0;
     private Transform goalPosition;
 
-    //
+    [Header("Misc.")]
     private GameController gameController;
+    public Animator animator;
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
         pathSystem = FindObjectOfType<PathSystem>();
         gameController = FindObjectOfType<GameController>();
 
@@ -35,6 +37,7 @@ public class EnemyController : MonoBehaviour
 
         actualHealthPoint = Random.Range(baseHealthPoint, baseHealthPoint * GameController.levelCount);
         damage = damage + 10 * GameController.levelCount;
+        goldWorth = goldWorth + 20 * GameController.levelCount;
 
         hpSlider.maxValue = actualHealthPoint;
         hpSlider.value = actualHealthPoint;
@@ -79,6 +82,8 @@ public class EnemyController : MonoBehaviour
 
             this.GetComponent<CapsuleCollider>().enabled = false;
             this.GetComponent<SphereCollider>().enabled = false;
+
+            animator.SetTrigger("enemyDie");
         }
 
         hpSlider.value = actualHealthPoint;

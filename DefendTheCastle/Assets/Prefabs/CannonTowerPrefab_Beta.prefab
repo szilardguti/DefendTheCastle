@@ -529,7 +529,7 @@ Transform:
   m_GameObject: {fileID: 4909815735334630242}
   m_LocalRotation: {x: -0, y: -0.83778566, z: -0, w: 0.54599935}
   m_LocalPosition: {x: 3.1466155, y: 0, z: -3.3225179}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children:
   - {fileID: 4909815735334281474}
   - {fileID: 4909815735334215258}
@@ -550,7 +550,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 45
+  m_Radius: 60
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4909815734174290279
 MonoBehaviour:
@@ -564,7 +564,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 852b3ae0791e2fe4996f5df4f5acbbb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasTarget: 0
   cannonBallPrefab: {fileID: 55695159558606423, guid: caa6215253cf77949af2d4556d43d24c, type: 3}
   reloadSpeed: 2.5
 --- !u!1 &9124407316179174404

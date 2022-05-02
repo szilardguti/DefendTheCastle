@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class PlayerController : MonoBehaviour
     public float rotationSpeed = 10f;
     public float attackSpeed = 1.5f;
     public float damage = 15f;
-    public float healthPoints = 100f;
+    public float healthPoints = 200f;
     private bool isPlayerDizzy = false;
 
     private BoxCollider hitRange;
@@ -21,8 +22,11 @@ public class PlayerController : MonoBehaviour
     [Header("GameController")]
     public GameController gameController;
 
+    private Animator animator;
+
     private void Start()
     {
+        animator = GetComponent<Animator>();
         hitRange = GetComponent<BoxCollider>();
         capsuleBody = GetComponent<CapsuleCollider>();
     }
@@ -31,6 +35,8 @@ public class PlayerController : MonoBehaviour
     {
         float translation = Input.GetAxis("Vertical") * speed;
         float rotation = Input.GetAxis("Horizontal") * rotationSpeed;
+
+        animator.SetFloat("playerSpeed", Mathf.Abs(translation) );
 
         transform.Translate(0, 0, translation * Time.deltaTime * speed);
         transform.Rotate(0, rotation * Time.deltaTime * rotationSpeed, 0);
@@ -55,6 +61,8 @@ public class PlayerController : MonoBehaviour
 
                 Debug.Log("Enemy: " + other.name + " hit!");
                 StartCoroutine(PlayerAttackOnCooldown());
+
+                animator.SetTrigger("playerAttack");
             }
         }
     }
@@ -68,9 +76,24 @@ public class PlayerController : MonoBehaviour
             {
                 StartCoroutine(PlayerDizzy());
             }
+
+            DamagePlayer(collision.gameObject.GetComponent<EnemyController>());
+
         }
     }
 
+    private void DamagePlayer(EnemyController enemy)
+    {
+        enemy.animator.SetTrigger("enemyAttack");
+        healthPoints -= enemy.damage;
+
+        if(healthPoints < 0)
+        {
+            GameController.isGameLost = true;
+            gameController.GameOver();
+            animator.SetTrigger("playerDie");
+        }
+    }
 
     IEnumerator PlayerAttackOnCooldown()
     {

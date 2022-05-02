@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class CannonBallExplosion : MonoBehaviour
 {
+
+    public GameObject explosionPrefab;
+    public GameObject cannonFireExplosion;
+
+    private void Start()
+    {
+        Instantiate(cannonFireExplosion, transform.position, Quaternion.identity);
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 2f);
@@ -14,7 +23,7 @@ public class CannonBallExplosion : MonoBehaviour
                 hitCollider.GetComponent<EnemyController>().enemyHit(40f);
             }
         }
-
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         Destroy(this.gameObject);
     }
 }
