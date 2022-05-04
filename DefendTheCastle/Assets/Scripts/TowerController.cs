@@ -8,6 +8,7 @@ public class TowerController : MonoBehaviour
     private Transform origoTransform;
     private bool hasTarget = false;
 
+    private AudioSource audioSource;
 
     private Vector3 previousTargetPos;
     private float targetVelocity;
@@ -25,6 +26,7 @@ public class TowerController : MonoBehaviour
         target = origoTransform;
 
         cannonBallParent = GameObject.Find("CannonBalls").transform;
+        audioSource = GetComponent<AudioSource>();
 
         StartCoroutine(CheckIfCouldShoot());
     }
@@ -92,6 +94,8 @@ public class TowerController : MonoBehaviour
         {
             GameObject ballShot = Instantiate(cannonBallPrefab, transform.Find("rotater").Find("CannonBallSpawnPoint").position, transform.Find("rotater").rotation, cannonBallParent);
             ballShot.GetComponent<Rigidbody>().AddForce(forceVec, ForceMode.Impulse);
+
+            audioSource.PlayOneShot(audioSource.clip, audioSource.volume);
 
             yield return new WaitForSeconds(reloadSpeed);
         }

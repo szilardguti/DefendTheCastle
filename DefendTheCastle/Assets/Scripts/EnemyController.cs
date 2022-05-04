@@ -23,14 +23,22 @@ public class EnemyController : MonoBehaviour
     private Transform goalPosition;
 
     [Header("Misc.")]
-    private GameController gameController;
     public Animator animator;
+    private GameController gameController;
+
+
+
+    [Header("Sound components")]
+    public AudioClip hitSound;
+    public AudioClip deathSound;
+    private AudioSource audioSource;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         pathSystem = FindObjectOfType<PathSystem>();
         gameController = FindObjectOfType<GameController>();
+        audioSource = GetComponent<AudioSource>();
 
 
         goalPosition = pathSystem.wayPoints[0];
@@ -82,6 +90,7 @@ public class EnemyController : MonoBehaviour
             return;
 
         actualHealthPoint -= damageDealt;
+        audioSource.PlayOneShot(hitSound, audioSource.volume);
 
         if (actualHealthPoint < 0)
         {
@@ -96,6 +105,7 @@ public class EnemyController : MonoBehaviour
             this.transform.Find("Canvas").gameObject.SetActive(false);
 
             animator.SetTrigger("enemyDie");
+            audioSource.PlayOneShot(deathSound, audioSource.volume);
         }
 
         hpSlider.value = actualHealthPoint;

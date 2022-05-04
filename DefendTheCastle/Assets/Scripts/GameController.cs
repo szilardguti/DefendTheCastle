@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -184,5 +185,14 @@ public class GameController : MonoBehaviour
     {
         Time.timeScale = 1;
         menuBackground.SetActive(false);
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        isGameLost = false;
+        isGamePaused = false;
+        isGameWon = false;
+        Time.timeScale = 1;
     }
 }

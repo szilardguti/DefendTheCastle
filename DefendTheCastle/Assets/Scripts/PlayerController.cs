@@ -26,11 +26,17 @@ public class PlayerController : MonoBehaviour
 
     private Animator animator;
 
+    [Header("Sound components")]
+    private AudioSource audioSource;
+    public AudioClip hitSound;
+    public AudioClip deathSound;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
         hitRange = GetComponent<BoxCollider>();
         capsuleBody = GetComponent<CapsuleCollider>();
+        audioSource = GetComponent<AudioSource>();
 
         cannonParent = GameObject.Find("Cannons").transform;
 
@@ -94,13 +100,17 @@ public class PlayerController : MonoBehaviour
 
     private void DamagePlayer(EnemyController enemy)
     {
-        enemy.animator.SetTrigger("enemyAttack");
         actualHealthPoints -= enemy.damage;
 
-        if(actualHealthPoints < 0)
+        enemy.animator.SetTrigger("enemyAttack");
+        audioSource.PlayOneShot(hitSound, audioSource.volume);
+
+        if (actualHealthPoints < 0)
         {
             GameController.isGameLost = true;
             gameController.GameOver();
+
+            audioSource.PlayOneShot(deathSound, audioSource.volume);
             animator.SetTrigger("playerDie");
         }
 

@@ -13,10 +13,12 @@ public class CannonBallExplosion : MonoBehaviour
     private Transform particleParent;
     private List<EnemyController> enemiesHit;
 
+
     private void Start()
     {
         enemiesHit = new List<EnemyController>();
         particleParent = GameObject.Find("/Particles").transform;
+
         Instantiate(cannonFireExplosion, transform.position, Quaternion.identity, particleParent);
     }
 

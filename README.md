@@ -28,4 +28,6 @@ Esc gomb – Átmenetileg szünetel a játék, itt van lehetőség kilépni vagy
 
 [Ég textúra](https://assetstore.unity.com/packages/2d/textures-materials/sky/fantasy-skybox-free-18353)
 
-[Arany modellek](https://assetstore.unity.com/packages/3d/props/medieval-gold-14162)
+[Robbanás hangok](https://assetstore.unity.com/packages/audio/sound-fx/free-sound-effects-pack-155776#description)
+[Karakter hangok](https://assetstore.unity.com/packages/audio/sound-fx/voices/attack-jump-hit-damage-human-sounds-32785#description)
+[Háttérzene](https://assetstore.unity.com/packages/audio/music/world/authentic-medieval-battle-music-free-40578#description)
