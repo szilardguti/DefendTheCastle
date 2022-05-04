@@ -17,11 +17,15 @@ public class TowerController : MonoBehaviour
     [Header("Cannonball")]
     public GameObject cannonBallPrefab;
     public float reloadSpeed = 2.5f;
+    private Transform cannonBallParent;
 
     private void Start()
     {
         origoTransform = GameObject.Find("/Enemies").transform;
         target = origoTransform;
+
+        cannonBallParent = GameObject.Find("CannonBalls").transform;
+
         StartCoroutine(CheckIfCouldShoot());
     }
 
@@ -86,7 +90,7 @@ public class TowerController : MonoBehaviour
 
         if (hasTarget && !float.IsNaN(forceVec.x) && !float.IsNaN(forceVec.z) && !float.IsNaN(forceVec.y))
         {
-            GameObject ballShot = Instantiate(cannonBallPrefab, transform.Find("rotater").Find("CannonBallSpawnPoint").position, transform.Find("rotater").rotation);
+            GameObject ballShot = Instantiate(cannonBallPrefab, transform.Find("rotater").Find("CannonBallSpawnPoint").position, transform.Find("rotater").rotation, cannonBallParent);
             ballShot.GetComponent<Rigidbody>().AddForce(forceVec, ForceMode.Impulse);
 
             yield return new WaitForSeconds(reloadSpeed);

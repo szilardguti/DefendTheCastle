@@ -8,9 +8,16 @@ public class CannonBallExplosion : MonoBehaviour
     public GameObject explosionPrefab;
     public GameObject cannonFireExplosion;
 
+    public float cannonDamage = 40f;
+
+    private Transform particleParent;
+    private List<EnemyController> enemiesHit;
+
     private void Start()
     {
-        Instantiate(cannonFireExplosion, transform.position, Quaternion.identity);
+        enemiesHit = new List<EnemyController>();
+        particleParent = GameObject.Find("/Particles").transform;
+        Instantiate(cannonFireExplosion, transform.position, Quaternion.identity, particleParent);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -18,12 +25,19 @@ public class CannonBallExplosion : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 2f);
         foreach (var hitCollider in hitColliders)
         {
+            
             if (hitCollider.CompareTag("Enemy") && hitCollider is SphereCollider)
             {
-                hitCollider.GetComponent<EnemyController>().enemyHit(40f);
+                
+                EnemyController enemy = hitCollider.GetComponent<EnemyController>();
+                if (!enemiesHit.Contains(enemy))
+                {
+                    enemy.EnemyHit(cannonDamage);
+                    enemiesHit.Add(enemy);
+                }
             }
         }
-        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity, particleParent);
         Destroy(this.gameObject);
     }
 }

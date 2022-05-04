@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Turret Prefab - TODO clean this out of here")]
     public GameObject turretPrefab;
+    private Transform cannonParent;
 
     [Header("GameController")]
     public GameController gameController;
@@ -30,6 +31,9 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         hitRange = GetComponent<BoxCollider>();
         capsuleBody = GetComponent<CapsuleCollider>();
+
+        cannonParent = GameObject.Find("Cannons").transform;
+
         actualHealthPoints = maxHealthPoints;
     }
 
@@ -52,7 +56,7 @@ public class PlayerController : MonoBehaviour
         {
             if (CheckIfCanPlaceTurret())
             {
-                Instantiate(turretPrefab, transform.position, Quaternion.identity);
+                Instantiate(turretPrefab, transform.position, Quaternion.identity, cannonParent);
                 gameController.RemoveGold();
             }
         }
@@ -62,11 +66,10 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && hitRange.enabled)
             {
-                other.GetComponent<EnemyController>().enemyHit(damage);
+                other.GetComponent<EnemyController>().EnemyHit(damage);
 
-                Debug.Log("Enemy: " + other.name + " hit!");
                 StartCoroutine(PlayerAttackOnCooldown());
 
                 animator.SetTrigger("playerAttack");
@@ -133,7 +136,7 @@ public class PlayerController : MonoBehaviour
     {
         if(gameController.towerCost > gameController.goldAmount)
         {
-            Debug.Log("Not enough gold for a turret!");
+            gameController.ShowCantBuildTower("Not Enough gold!");
             return false;
         }
 
@@ -145,6 +148,8 @@ public class PlayerController : MonoBehaviour
             if (hitCollider.CompareTag("Obstacle") || hitCollider.CompareTag("Road"))
             {
                 result = false;
+                gameController.ShowCantBuildTower("You can't build here!");
+                return result;
             }
         }
 

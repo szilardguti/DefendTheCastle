@@ -22,11 +22,15 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI levelText;
     public GameObject menuBackground;
     public TextMeshProUGUI menuText;
+    public TextMeshProUGUI cantBuildTowerText;
 
     [Header("Player Components for HP")]
     public Slider playerHPSlider;
     public TextMeshProUGUI playerHPText;
     private PlayerController player;
+
+    [Header("Base component")]
+    public BaseController baseController;
 
 
     private void Start()
@@ -36,6 +40,7 @@ public class GameController : MonoBehaviour
         UpdateHP();
 
         menuBackground.SetActive(false);
+        cantBuildTowerText.gameObject.SetActive(false);
         UpdateGoldText();
         UpdateLevelText();
 
@@ -81,6 +86,23 @@ public class GameController : MonoBehaviour
         levelText.SetText("Level: {}", levelCount);
     }
 
+    public void ShowCantBuildTower(string whyCantBuild)
+    {
+        cantBuildTowerText.SetText(whyCantBuild);
+        cantBuildTowerText.gameObject.SetActive(true);
+        StartCoroutine(FadeTextOut());
+    }
+
+    IEnumerator FadeTextOut()
+    {
+        for (float i = 1; i >= 0; i -= Time.deltaTime)
+        {
+            cantBuildTowerText.color = new Color(1, 1, 1, i);
+            yield return null;
+        }
+        cantBuildTowerText.gameObject.SetActive(false);
+    }
+
     public void UpdateHP()
     {
         playerHPSlider.value = player.actualHealthPoints;
@@ -101,7 +123,7 @@ public class GameController : MonoBehaviour
 
         if (enemySpawnSystem.isWaveOver)
         {
-            Debug.Log("Wave " + levelCount + "is finished");
+            Debug.Log("Wave " + levelCount + " is finished");
 
             levelCount++;
 
@@ -116,10 +138,12 @@ public class GameController : MonoBehaviour
                 enemy.gameObject.SetActive(false);
             }
 
+            //Starts the new wave here!
             if (!isGameWon)
             {
                 SpawnWave();
                 UpdateLevelText();
+                baseController.BaseAddHPEndOfWave();
                 enemySpawnSystem.isWaveOver = false;
             }
 
@@ -136,6 +160,8 @@ public class GameController : MonoBehaviour
         StopAllCoroutines();
         enemySpawnSystem.StopSpawning();
         menuBackground.SetActive(true);
+
+        Time.timeScale = 0;
 
         if (isGameWon)
         {

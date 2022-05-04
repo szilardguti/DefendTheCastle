@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class EnemyController : MonoBehaviour
 {
     [Header("Enemy Stats")]
-    public float speed = 1.5f;
+    public float speed;
     public bool isDead = false;
-    public float baseHealthPoint = 100f;
+    public float baseHealthPoint;
     public float actualHealthPoint;
-    public float damage = 20;
+    public float damage;
     public int goldWorth;
 
     [Header("HP UI")]
@@ -76,7 +76,7 @@ public class EnemyController : MonoBehaviour
     }
 
 
-    public void enemyHit(float damageDealt)
+    public void EnemyHit(float damageDealt)
     {
         if (isDead)
             return;
@@ -93,6 +93,7 @@ public class EnemyController : MonoBehaviour
 
             this.GetComponent<CapsuleCollider>().enabled = false;
             this.GetComponent<SphereCollider>().enabled = false;
+            this.transform.Find("Canvas").gameObject.SetActive(false);
 
             animator.SetTrigger("enemyDie");
         }
