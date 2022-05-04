@@ -4784,7 +4784,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Restart Level
+  m_text: Restart Game
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8404,6 +8404,8 @@ MonoBehaviour:
   isWaveOver: 0
   enemyPrefabs:
   - {fileID: 2373292576037535559, guid: 3fd2c07bf7aff7944a7eff16b29887f4, type: 3}
+  - {fileID: 2373292576037535559, guid: 3ab6ce6f278c7ae468617750f5e420da, type: 3}
+  - {fileID: 2373292576037535559, guid: 13d011001cb5e0a4c87697133e053d1b, type: 3}
   pathSystem: {fileID: 246783683}
 --- !u!4 &1904846777
 Transform:
