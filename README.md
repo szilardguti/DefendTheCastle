@@ -18,9 +18,9 @@ Esc gomb – Átmenetileg szünetel a játék, itt van lehetőség kilépni vagy
 
 **Felhasznált assetek:**
 
-[Karakterek és környezet](https://assetstore.unity.com/packages/3d/low-poly-medieval-strategy-pack-71644)
+[Karakterek és bázis](https://assetstore.unity.com/packages/3d/low-poly-medieval-strategy-pack-71644)
 
-[Környezeti textúrák](https://assetstore.unity.com/packages/2d/textures-materials/floors/yughues-free-ground-materials-13001)
+[Környezet](https://assetstore.unity.com/packages/3d/environments/fantasy/free-slavic-medieval-environment-town-interior-and-exterior-167010#publisher)
 
 [Torony](https://assetstore.unity.com/packages/3d/props/exterior/tower-defence-cannon-74837)
 
